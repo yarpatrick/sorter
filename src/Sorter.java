@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Sorter {
     public static void main(String[] args) {
@@ -11,10 +12,10 @@ public class Sorter {
             list = student.readInList(fileRead);
             var arrayStudents = new Student[list.size()];
             student.readInStudents(arrayStudents, list);
-            var sort = new IntroSort();
-            sort.Sort(arrayStudents, new CompareStudents());
+            var sort = new IntroSort(arrayStudents);
+            sort.sortData();
             PrintWriter printWriter = new PrintWriter(fileWrite);
-            student.print(arrayStudents, printWriter);
+            student.print(sort.students, printWriter);
             printWriter.close();
         }
         catch (IOException e)

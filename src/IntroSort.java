@@ -1,159 +1,118 @@
 class IntroSort {
-    //то, что тут было
-    public void Sort(Student[] students, CompareStudents compareStudents) {
-        int gap = students.length;
-        boolean isSorted = false;
-        while (!isSorted || gap != 1) {
-            if (gap > 1) {
-                gap = gap * 10 / 13;
-            } else {
-                gap = 1;
-            }
-            isSorted = true;
-            for (int i = gap; i < students.length; i++)
-                if (compareStudents.compare(students[i - gap], students[i]) < 0) {
-                    var tmp = students[i];
-                    students[i] = students[i - gap];
-                    students[i - gap] = tmp;
-                    isSorted = false;
-                }
-        }
-    }
-    //то, что тут будет (надо переделать под сортировку стипендии)
-    private static int size_threshold = 16;
-
-    public static void sort(int[] a)
+    private int countStudents;
+    public CompareStudents compareStudents = new CompareStudents();
+    public Student[] students;
+    IntroSort(Student[] student)
     {
-        introsort_loop(a, 0, a.length, 2*floor_lg(a.length));
+        students = student;
+        this.countStudents = students.length;
+    }
+    private void swap(int i, int j)
+    {
+        Student temp = students[i];
+        students[i] = students[j];
+        students[j] = temp;
     }
 
-    public static void sort(int[] a, int begin, int end)
-    {
-        if (begin < end)
-        {
-            introsort_loop(a, begin, end, 2*floor_lg(end-begin));
-        }
-    }
-
-    private static void introsort_loop (int[] a, int lo, int hi, int depth_limit)
-    {
-        while (hi-lo > size_threshold)
-        {
-            if (depth_limit == 0)
-            {
-                heapsort(a, lo, hi);
-                return;
-            }
-            depth_limit=depth_limit-1;
-            int p=partition(a, lo, hi, medianof3(a, lo, lo+((hi-lo)/2)+1, hi-1));
-            introsort_loop(a, p, hi, depth_limit);
-            hi=p;
-        }
-        insertionsort(a, lo, hi);
-    }
-    private static int partition(int[] a, int lo, int hi, int x)
-    {
-        int i=lo, j=hi;
-        while (true)
-        {
-            while (a[i] < x) i++;
-            j=j-1;
-            while (x < a[j]) j=j-1;
-            if(!(i < j))
-                return i;
-            exchange(a,i,j);
-            i++;
-        }
-    }
-
-    private static int medianof3(int[] a, int lo, int mid, int hi)
-    {
-        if (a[mid] < a[lo])
-        {
-            if (a[hi] < a[mid])
-                return a[mid];
-            else
-            {
-                if (a[hi] < a[lo])
-                    return a[hi];
-                else
-                    return a[lo];
-            }
-        }
-        else
-        {
-            if (a[hi] < a[mid])
-            {
-                if (a[hi] < a[lo])
-                    return a[lo];
-                else
-                    return a[hi];
-            }
-            else
-                return a[mid];
-        }
-    }
-    private static void heapsort(int[] a, int lo, int hi)
-    {
-        int n = hi-lo;
-        for (int i=n/2; i>=1; i=i-1)
-        {
-            downheap(a,i,n,lo);
-        }
-        for (int i=n; i>1; i=i-1)
-        {
-            exchange(a,lo,lo+i-1);
-            downheap(a,1,i-1,lo);
-        }
-    }
-
-    private static void downheap(int[] a, int i, int n, int lo)
-    {
-        int d = a[lo+i-1];
+    private void maxHeap(int i, int heapN, int begin) {
+        Student temp = students[begin + i - 1];
         int child;
-        while (i<=n/2)
-        {
-            child = 2*i;
-            if (child < n && a[lo+child-1] < a[lo+child])
-            {
+
+        while (i <= heapN / 2) {
+            child = 2 * i;
+
+            if (child < heapN
+                    && students[begin + child - 1].getPrice() < students[begin + child].getPrice())
                 child++;
-            }
-            if (d >= a[lo+child-1]) break;
-            a[lo+i-1] = a[lo+child-1];
+
+            if (temp.getPrice() >= students[begin + child - 1].getPrice())
+                break;
+
+            students[begin + i - 1] = students[begin + child - 1];
             i = child;
         }
-        a[lo+i-1] = d;
+        students[begin + i - 1] = temp;
     }
-
-    private static void insertionsort(int[] a, int lo, int hi)
+    private void heapify(int begin, int heapN)
     {
-        int i,j;
-        int t;
-        for (i=lo; i < hi; i++)
-        {
-            j=i;
-            t = a[i];
-            while(j!=lo && t < a[j-1])
-            {
-                a[j] = a[j-1];
-                j--;
-            }
-            a[j] = t;
+        for (int i = (heapN) / 2; i >= 1; i--)
+            maxHeap(i, heapN, begin);
+    }
+    private void heapSort(int begin, int end)
+    {
+        int heapN = end - begin;
+        this.heapify(begin, heapN);
+        for (int i = heapN; i >= 1; i--) {
+            swap(begin, begin + i);
+            maxHeap(1, i, begin);
         }
     }
 
-    /*
-     * Common methods for all algorithms
-     */
-    private static void exchange(int[] a, int i, int j)
+    private void insertionSort(int left, int right)
     {
-        int t=a[i];
-        a[i]=a[j];
-        a[j]=t;
-    }
 
-    private static int floor_lg(int a)
+        for (int i = left; i <= right; i++) {
+            Student key = students[i];
+            int j = i;
+            while (j > left && compareStudents.compare(students[j - 1], key) == 1) {
+                students[j] = students[j - 1];
+                j--;
+            }
+            students[j] = key;
+        }
+    }
+    private int findPivot(int a1, int b1, int c1)
     {
-        return (int)(Math.floor(Math.log(a)/Math.log(2)));
+        int max = Math.max(Math.max(students[a1].getPrice(), students[b1].getPrice()), students[c1].getPrice());
+        int min = Math.min(Math.min(students[a1].getPrice(), students[b1].getPrice()), students[c1].getPrice());
+        int median = max ^ min ^ students[a1].getPrice() ^ students[b1].getPrice() ^ students[c1].getPrice();
+        if (median == students[a1].getPrice())
+            return a1;
+        if (median == students[b1].getPrice())
+            return b1;
+        return c1;
+    }
+    private int partition(int low, int high)
+    {
+        Student pivot = students[high];
+        int i = (low - 1);
+        for (int j = low; j <= high - 1; j++) {
+            if(compareStudents.compare(students[i], pivot) == -1 || compareStudents.compare(students[i], pivot) == 2){
+                i++;
+                swap(i, j);
+            }
+        }
+        swap(i + 1, high);
+        return (i + 1);
+    }
+    private void sortDataUtil(int begin, int end, int depthLimit)
+    {
+        if (end - begin > 16) {
+            if (depthLimit == 0) {
+                this.heapSort(begin, end);
+                return;
+            }
+
+            depthLimit = depthLimit - 1;
+            int pivot = findPivot(begin,
+                    begin + ((end - begin) / 2) + 1,
+                    end);
+            swap(pivot, end);
+            int p = partition(begin, end);
+            sortDataUtil(begin, p - 1, depthLimit);
+            sortDataUtil(p + 1, end, depthLimit);
+        }
+
+        else {
+            insertionSort(begin, end);
+        }
+    }
+    public void sortData()
+    {
+        int depthLimit
+                = (int)(2 * Math.floor(Math.log(countStudents) /
+                Math.log(2)));
+
+        this.sortDataUtil(0, countStudents - 1, depthLimit);
     }
 }

@@ -1,9 +1,10 @@
 import java.io.*;
 import java.util.ArrayList;
-
+import java.time.*;
 class Student extends Object{
     private String name, surname;
-    private int date, month, year, price;
+    private int date, month, year, price, yearOld;
+    LocalDate Year = LocalDate.now();
 
     public ArrayList readInList(File readFile) {
         ArrayList list = new ArrayList();
@@ -36,14 +37,18 @@ class Student extends Object{
     public void print(Student[] students, PrintWriter print) {
         for (int i = 0; i < students.length; i++) {
             print.println((i + 1) + " Фамилия и имя студента : " +
-                    students[i].getSurname() + students[i].getName() +
-                    ". дата рождения : " +
+                    students[i].getSurname() + " " + students[i].getName() +
+                    ". Дата рождения : " +
                     students[i].getDate() + " " + students[i].getMonth() + " " + students[i].getYear() +
-                    ". стипендия : " +
+                    ". Возраст : " + students[i].birthdate() +
+                    ". Стипендия : " +
                     students[i].getPrice() +
-                    "hashCode : " +
+                    ". HashCode : " +
                     students[i].hashCode());
         }
+    }
+    public int birthdate(){
+        return Math.abs(Period.between(Year, LocalDate.of(year,month,date)).getYears());
     }
     public void setName(String name) {
         if (name.equals(""))

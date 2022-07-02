@@ -7,7 +7,7 @@ class CompareStudents implements Comparator<Student> {
         else if (x.getPrice() < y.getPrice())
             return -1;
         else if (x.getPrice() == y.getPrice())
-            return y.getName().compareTo(x.getName()) + y.getSurname().compareTo(x.getSurname());
+            return 2;
         return 0;
     }
 }
