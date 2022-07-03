@@ -20,7 +20,7 @@ public class Utils {
                         students[i].getDate() + " " + students[i].getMonth() + " " + students[i].getYear() +
                         ". Возраст : " + students[i].birthdate() +
                         ". Стипендия : " +
-                        students[i].getPrice() +
+                        students[i].getStipend() +
                         ". HashCode : " +
                         students[i].hashCode());
             }

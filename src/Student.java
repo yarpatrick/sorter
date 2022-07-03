@@ -1,16 +1,17 @@
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.time.*;
 class Student extends Object{
     private String name, surname;
-    private int date, month, year, price;
+    private int date;
+    private int month;
+    private int year;
+    private int stipend;
+
     LocalDate Year = LocalDate.now();
     public Student(String str){
         String[] element = str.split(",");
         setName(element[0]);
         setSurname(element[1]);
-        setPrice(Integer.parseInt(element[5]));
+        setStipend(Integer.parseInt(element[5]));
         setYear(Integer.parseInt(element[4]));
         setMonth(Integer.parseInt(element[3]));
         setDate(Integer.parseInt(element[2]));
@@ -47,13 +48,13 @@ class Student extends Object{
         this.year = year;
     }
 
-    public void setPrice(int price) {
-        if (price < 0)
+    public void setStipend(int stipend) {
+        if (stipend < 0)
             throw new IllegalArgumentException("стипендия отрицательна");
-        this.price = price;
+        this.stipend = stipend;
     }
-    public int getPrice() {
-        return price;
+    public int getStipend() {
+        return stipend;
     }
     public int getYear() {
         return year;
@@ -76,13 +77,13 @@ class Student extends Object{
     }
 
     public int hashCode() {
-        return this.surname.hashCode() + String.valueOf(this.price).hashCode();
+        return this.surname.hashCode() + String.valueOf(this.stipend).hashCode();
     }
 
     public boolean equals(Object obj) {
         if (this==obj) return true;
         if (obj instanceof Student) return false;
         return this.surname.equals(((Student) obj).surname) &&
-                this.price ==(((Student) obj).price);
+                this.stipend ==(((Student) obj).stipend);
     }
 }

@@ -63,12 +63,12 @@ class IntroSort {
     }
     private int findPivot(int a1, int b1, int c1)
     {
-        int max = Math.max(Math.max(students[a1].getPrice(), students[b1].getPrice()), students[c1].getPrice());
-        int min = Math.min(Math.min(students[a1].getPrice(), students[b1].getPrice()), students[c1].getPrice());
-        int median = max ^ min ^ students[a1].getPrice() ^ students[b1].getPrice() ^ students[c1].getPrice();
-        if (median == students[a1].getPrice())
+        int max = Math.max(Math.max(students[a1].getStipend(), students[b1].getStipend()), students[c1].getStipend());
+        int min = Math.min(Math.min(students[a1].getStipend(), students[b1].getStipend()), students[c1].getStipend());
+        int median = max ^ min ^ students[a1].getStipend() ^ students[b1].getStipend() ^ students[c1].getStipend();
+        if (median == students[a1].getStipend())
             return a1;
-        if (median == students[b1].getPrice())
+        if (median == students[b1].getStipend())
             return b1;
         return c1;
     }
