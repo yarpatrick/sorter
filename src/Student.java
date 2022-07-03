@@ -1,39 +1,11 @@
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.time.*;
 class Student extends Object{
     private String name, surname;
     private int date, month, year, price, yearOld;
     LocalDate Year = LocalDate.now();
-
-    public ArrayList readInList(File readFile) {
-        ArrayList list = new ArrayList();
-        try {
-            FileReader fileReader = new FileReader(readFile);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                list.add(line);
-            }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-    public void readInStudents(Student[] students, ArrayList list) {
-        for (int i = 0; i < list.size(); i++) {
-            students[i] = new Student();
-            String[] element = list.get(i).toString().split(",");
-            students[i].setName(element[0]);
-            students[i].setSurname(element[1]);
-            students[i].setDate(Integer.parseInt(element[2]));
-            students[i].setMonth(Integer.parseInt(element[3]));
-            students[i].setYear(Integer.parseInt(element[4]));
-            students[i].setPrice(Integer.parseInt(element[5]));
-        }
-    }
-
     public void print(Student[] students, PrintWriter print) {
         for (int i = 0; i < students.length; i++) {
             print.println((i + 1) + " ‘амили€ и им€ студента : " +
@@ -52,33 +24,36 @@ class Student extends Object{
     }
     public void setName(String name) {
         if (name.equals(""))
-            throw new IllegalArgumentException("name = null");
+            throw new IllegalArgumentException("Argument cannot be empty");
         this.name = name;
     }
     public void setSurname(String surname) {
         if (surname.equals(""))
-            throw new IllegalArgumentException("name = null");
+            throw new IllegalArgumentException("Argument cannot be empty");
         this.surname = surname;
     }
     public void setDate(int date) {
         if (date < 0 || date > 31)
-            throw new IllegalArgumentException("name = null");
+            if(month == 1|| month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
+            throw new IllegalArgumentException("дата введена неверно");
+        if(month == 2 && year % 4 != 0 && date >= 29) throw new IllegalArgumentException("дата не соответствует мес€цу");
+        if(month == 2 && year % 4 == 0 && date < 29) throw new IllegalArgumentException("дата не соответствует мес€цу");
         this.date = date;
     }
     public void setMonth(int month) {
         if (month < 0 || month > 12)
-            throw new IllegalArgumentException("name = null");
+            throw new IllegalArgumentException("мес€ц введен неверно");
         this.month = month;
     }
     public void setYear(int year) {
         if (year < 1922 || year > 2022)
-            throw new IllegalArgumentException("name = null");
+            throw new IllegalArgumentException("год введен неверно");
         this.year = year;
     }
 
     public void setPrice(int price) {
         if (price < 0)
-            throw new IllegalArgumentException("point < 0");
+            throw new IllegalArgumentException("стипенди€ отрицательна");
         this.price = price;
     }
     public int getPrice() {
