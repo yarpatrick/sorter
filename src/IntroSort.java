@@ -22,10 +22,10 @@ class IntroSort {
             child = 2 * i;
 
             if (child < heapN
-                    && students[begin + child - 1].getPrice() < students[begin + child].getPrice())
+                    && compareStudents.compare(students[begin + child - 1], students[begin + child]) == -1)
                 child++;
 
-            if (temp.getPrice() >= students[begin + child - 1].getPrice())
+            if (compareStudents.compare(temp,students[begin + child - 1]) == 1 || compareStudents.compare(temp,students[begin + child - 1]) == 2)
                 break;
 
             students[begin + i - 1] = students[begin + child - 1];

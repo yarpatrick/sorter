@@ -4,20 +4,16 @@ import java.util.ArrayList;
 import java.time.*;
 class Student extends Object{
     private String name, surname;
-    private int date, month, year, price, yearOld;
+    private int date, month, year, price;
     LocalDate Year = LocalDate.now();
-    public void print(Student[] students, PrintWriter print) {
-        for (int i = 0; i < students.length; i++) {
-            print.println((i + 1) + " ‘амили€ и им€ студента : " +
-                    students[i].getSurname() + " " + students[i].getName() +
-                    ". ƒата рождени€ : " +
-                    students[i].getDate() + " " + students[i].getMonth() + " " + students[i].getYear() +
-                    ". ¬озраст : " + students[i].birthdate() +
-                    ". —типенди€ : " +
-                    students[i].getPrice() +
-                    ". HashCode : " +
-                    students[i].hashCode());
-        }
+    public Student(String str){
+        String[] element = str.split(",");
+        setName(element[0]);
+        setSurname(element[1]);
+        setPrice(Integer.parseInt(element[5]));
+        setYear(Integer.parseInt(element[4]));
+        setMonth(Integer.parseInt(element[3]));
+        setDate(Integer.parseInt(element[2]));
     }
     public int birthdate(){
         return Math.abs(Period.between(Year, LocalDate.of(year,month,date)).getYears());
@@ -32,13 +28,13 @@ class Student extends Object{
             throw new IllegalArgumentException("Argument cannot be empty");
         this.surname = surname;
     }
-    public void setDate(int date) {
-        if (date < 0 || date > 31)
-            if(month == 1|| month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
+    public void setDate(int day) {
+        if (day < 0 || day > 31) throw new IllegalArgumentException("дата введена неверно");
+            if((month == 4 || month == 6 || month == 8 || month == 9 || month == 11) && day > 30)
             throw new IllegalArgumentException("дата введена неверно");
-        if(month == 2 && year % 4 != 0 && date >= 29) throw new IllegalArgumentException("дата не соответствует мес€цу");
-        if(month == 2 && year % 4 == 0 && date < 29) throw new IllegalArgumentException("дата не соответствует мес€цу");
-        this.date = date;
+        if(month == 2 && year % 4 != 0 && day >= 29) throw new IllegalArgumentException("дата не соответствует мес€цу");
+        if(month == 2 && year % 4 == 0 && day == 29) throw new IllegalArgumentException("дата не соответствует мес€цу");
+        this.date = day;
     }
     public void setMonth(int month) {
         if (month < 0 || month > 12)
